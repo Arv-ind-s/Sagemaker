@@ -1,18 +1,29 @@
 🧠 Employee Attrition Prediction using AWS SageMaker
-This project demonstrates how to build, train, evaluate, and deploy a machine learning model on AWS SageMaker to predict employee attrition. It uses Logistic Regression to classify whether an employee is likely to leave the organization based on demographic and employment-related features.
+This project demonstrates how to build, train, evaluate, and deploy a machine learning model on AWS SageMaker to predict employee attrition. 
+It uses Logistic Regression to classify whether an employee is likely to leave the organization based on demographic and employment-related features.
+
 📋 Project Overview
 The main objective of this project is to use AWS SageMaker along with Python libraries like boto3, pandas, scikit-learn, and seaborn to:
+
 Connect to AWS resources such as S3.
+
 Retrieve and preprocess employee data.
+
 Train a Logistic Regression model for attrition prediction.
+
 Evaluate the model using key performance metrics.
+
 Deploy and store the trained model in an AWS S3 bucket for future predictions.
+
+
 🧩 Tasks Breakdown
+
 Task 1: Setting Up AWS Resources
 Established an AWS session using boto3.
 Retrieved the SageMaker execution role ARN for authentication.
 Connected to an S3 bucket named employeedataset12 and downloaded the dataset Employee.csv.
 Loaded the dataset into a pandas DataFrame for analysis.
+
 Task 2 & 3: Data Exploration and Visualization
 Verified and removed duplicate records.
 Analyzed data shape and structure.
@@ -20,10 +31,12 @@ Created visualizations:
 A pie chart showing the gender distribution.
 A count plot displaying the education-level distribution.
 These visual insights help understand the demographic balance of the workforce.
+
 Task 4: Feature Engineering
 Split the dataset into features (X) and target variable (Y).
 Applied OneHotEncoding to categorical variables and passthrough transformation for numerical features using ColumnTransformer.
 Ensured the feature matrix was ready for model training.
+
 Task 5: Model Building and Evaluation
 Split the dataset into training (80%) and testing (20%) sets.
 Scaled the features using StandardScaler to normalize values.
@@ -40,22 +53,26 @@ Accuracy	0.72
 Precision	0.63
 Recall	0.42
 F1-Score	0.50
+
 Task 6: Model Deployment
 Serialized the trained Logistic Regression model using joblib.
 Uploaded the serialized model to AWS S3 in the path:
 s3://employeedataset12/models/logreg_model.pkl
 Ensured successful deployment by verifying S3 upload completion.
+
 Task 7: Model Prediction from S3
 Downloaded the serialized model from S3 using boto3 and tempfile.
 Deserialized it back into memory for inference.
 Re-tested the model using test data to confirm prediction consistency.
 Verified the same accuracy and F1-score after reloading, confirming the model’s portability.
+
 🧠 Key Learnings
 Integration of AWS SDK (boto3) with SageMaker for ML workflows.
 Data engineering and preprocessing using scikit-learn pipelines.
 Model evaluation through standard metrics and visualization techniques.
 Model serialization and deployment to AWS S3 for scalable use.
 Real-world application of end-to-end ML pipeline automation.
+
 🧰 Tech Stack
 Category	Tools & Services
 Cloud Platform	AWS SageMaker, AWS S3
@@ -63,6 +80,7 @@ Programming Language	Python
 Libraries	pandas, numpy, scikit-learn, seaborn, matplotlib, joblib, boto3
 Model	Logistic Regression
 Visualization	Seaborn, Matplotlib
+
 ⚙️ Workflow Summary
 Data Ingestion – Load data from AWS S3.
 Data Cleaning – Remove duplicates and inconsistencies.
@@ -71,6 +89,7 @@ Model Training – Train Logistic Regression on processed data.
 Evaluation – Measure model performance via metrics and confusion matrix.
 Deployment – Serialize and push model to S3.
 Inference – Reload model from S3 for predictions.
+
 📦 Output
 Trained Logistic Regression model file:
 logreg_model.pkl stored in s3://employeedataset12/models/
@@ -80,12 +99,10 @@ Performance metrics ensuring reliability for deployment.
 AWS IAM roles were used for secure access.
 No sensitive or personally identifiable data is exposed.
 Temporary credentials and secure API handling ensure compliance with best practices.
+
 📈 Future Enhancements
 Replace Logistic Regression with advanced models like XGBoost or Random Forest.
 Automate model retraining via SageMaker Pipelines.
 Integrate real-time predictions using SageMaker Endpoints.
 Add dashboard visualization for HR analytics insights.
-👨‍💻 Author
-Arvind Sathyan
-Data & AI Engineer | AWS Certified | Machine Learning Practitioner
-📧 Contact: [Your Email or LinkedIn]
+
