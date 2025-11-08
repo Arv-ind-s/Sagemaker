@@ -1,58 +1,96 @@
-# 👨‍💻 SageMaker Employee Attrition Prediction Pipeline 🚀
+👨‍💻 SageMaker Employee Attrition Prediction Pipeline 🚀
+This repository implements an end-to-end Machine Learning workflow on Amazon SageMaker to predict employee attrition (LeaveOrNot). The pipeline covers data loading from S3, feature engineering, model training using Logistic Regression, evaluation, and finally, model serialization and deployment simulation by uploading the artifact back to S3.
 
-This repository implements an end-to-end Machine Learning workflow on **Amazon SageMaker** to predict employee attrition (LeaveOrNot). The pipeline covers data loading from S3, feature engineering, model training using **Logistic Regression**, evaluation, and finally, model serialization and deployment simulation by uploading the artifact back to S3.
+🌟 Project Overview
+The primary goal of this project is to successfully build, train, and validate a predictive model for employee attrition using raw data sourced from Amazon S3. The solution demonstrates key integration points between Python/Scikit-learn and AWS services like S3 and IAM (via execution role) within an Amazon SageMaker environment.
 
----
+Key Technologies Used
 
-## 🌟 Project Overview
+Cloud/ML Platform: Amazon SageMaker, AWS S3
 
-The primary goal of this project is to successfully build, train, and validate a predictive model for employee attrition using raw data sourced from Amazon S3. The solution demonstrates key integration points between Python/Scikit-learn and AWS services like **S3** and **IAM (via execution role)** within an Amazon SageMaker environment.
+Data Manipulation: Pandas
 
-### Key Technologies Used
+Modeling: Scikit-learn (LogisticRegression, StandardScaler, ColumnTransformer)
 
-* **Cloud/ML Platform:** Amazon SageMaker, AWS S3
-* **Data Manipulation:** Pandas
-* **Modeling:** Scikit-learn (`LogisticRegression`, `StandardScaler`, `ColumnTransformer`)
-* **Serialization:** Joblib
-* **Interaction:** Boto3 (AWS SDK for Python)
+Serialization: Joblib
 
----
+Interaction: Boto3 (AWS SDK for Python)
 
-## 📊 Workflow Execution Summary
+💾 Dataset & Task Summary
+The workflow processes an employee dataset loaded from S3. The target variable is LeaveOrNot.
 
-The project follows a standard ML lifecycle, with steps executed within a Jupyter Notebook environment.
+Initial Data Status
 
-### 1. Data Ingestion & Setup (Task 1 & 2)
+Metric	Value	Notes
+Initial Shape	(4653, 9)	Before any cleaning.
+Duplicate Records	1889	A significant number of duplicates were identified.
+Cleaned Shape	(2764, 9)	Shape after dropping identified duplicates.
+S3 Bucket Name	employeedataset12	Used for data sourcing and model artifact storage.
+Workflow Execution Summary
 
-| Metric | Value | Notes |
-| :--- | :--- | :--- |
-| S3 Bucket Name | `employeedataset12` | Used for data sourcing and model artifact storage. |
-| IAM Role | `arn:aws:sts::637423581679:assumed-role/sage-s3full/SageMaker` | Execution role retrieved for S3 access. |
-| Initial Data Shape | (4653, 9) | Records loaded from S3 (`Employee.csv`). |
-| Duplicate Records | 1889 | Identified but not explicitly removed in the provided script. |
+The notebook successfully completed all defined tasks:
 
-### 2. Feature Engineering & Preprocessing (Task 4)
+AWS Setup: Established Boto3 session and retrieved the IAM Execution Role ARN.
 
-The data was prepared for modeling using Scikit-learn's preprocessing tools.
+Data Ingestion: Downloaded Employee.csv from S3 to the local environment.
 
-| Step | Technique | Columns Applied | Output Features |
-| :--- | :--- | :--- | :--- |
-| Categorical Encoding | `OneHotEncoder` | `Education`, `City`, `Gender`, `EverBenched` | 10 |
-| Numerical Pass-Through | `passthrough` | `JoiningYear`, `PaymentTier`, `Age`, `ExperienceInCurrentDomain` | 4 |
-| Total Features | - | - | **14** |
+Analysis & Visualization: Generated visualizations for Gender Distribution (Pie Chart) and Education Levels (Count Plot).
 
-### 3. Model Training and Evaluation (Task 5)
+Feature Engineering:
 
-A Logistic Regression model was trained on the transformed and scaled features.
+Split data into X (Features) and Y (Target: LeaveOrNot).
 
-| Metric | Result | Notes |
-| :--- | :--- | :--- |
-| **Model** | `LogisticRegression` (`random_state=0`) | Used Scaled Features (`StandardScaler`) |
-| **Accuracy** | **`0.7240`** | Overall correct prediction rate. |
-| **Precision** | **`0.6329`** | Of all "Left" predictions, the percentage that actually left. |
-| **Recall** | **`0.4199`** | Of all employees who left, the percentage correctly identified. |
-| **F1 Score** | **`0.5048`** | Harmonic mean of Precision and Recall. |
+Applied ColumnTransformer to perform One-Hot Encoding on categorical features and Pass-Through on numerical features, resulting in a 14-feature array.
 
----
+Model Training & Evaluation:
 
-##
+Data split 80/20 (test_size=0.2, random_state=0).
+
+Features were scaled using StandardScaler.
+
+Trained a LogisticRegression model.
+
+Evaluation Metrics on Test Set (931 records):
+
+Accuracy: 0.7240
+
+Precision: 0.6329
+
+Recall: 0.4199
+
+F1 Score: 0.5048
+
+A Confusion Matrix Heatmap was generated for visual inspection.
+
+Model Deployment Simulation (Serialization):
+
+The trained model (logreg.pkl) was serialized using joblib.
+
+The artifact was uploaded to S3: s3://employeedataset12/models/logreg_model.pkl.
+
+Verification: The model was successfully downloaded from S3, loaded, and re-ran against the test set, yielding identical evaluation metrics, confirming integrity.
+
+⚙️ Setup & Execution (For Running the Notebook)
+This workflow is intended to be run within an Amazon SageMaker Notebook Instance or Studio Environment that has the necessary IAM role attached with S3 read/write permissions for the specified bucket.
+
+Prerequisites
+
+An active AWS Account.
+
+An IAM Role with permissions for:
+
+Amazon S3 read/write access to the bucket employeedataset12.
+
+Permissions to retrieve caller identity (sts:GetCallerIdentity).
+
+A SageMaker Execution Role ARN available to the environment.
+
+Environment Libraries (Installation required if not in a standard SageMaker image)
+
+Bash
+pip install sagemaker pandas boto3 scikit-learn seaborn joblib
+Key Data Paths
+
+Input Data: s3://employeedataset12/Employee.csv
+
+Output Model Artifact: s3://employeedataset12/models/logreg_model.pkl
